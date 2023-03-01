@@ -1,0 +1,59 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json",
+    "sourceType": "module"
+  },
+  "plugins": ["prettier", "@typescript-eslint/eslint-plugin", "import-helpers"],
+  "extends": [
+    "standard-with-typescript",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-prettier",
+    "prettier"
+  ],
+  "overrides": [],
+  "ignorePatterns": [".eslintrc.js"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "quoteProps": "as-needed",
+        "trailingComma": "none",
+        "singleQuote": true,
+        "printWidth": 80,
+        "jsxSingleQuote": true,
+        "endOfLine": "auto"
+      }
+    ],
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ],
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/arrow-parens": "off",
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "never",
+        "groups": ["/^@/", "module", "/^~/", ["parent", "sibling", "index"]],
+        "alphabetize": { "order": "asc", "ignoreCase": false }
+      }
+    ]
+  }
+}

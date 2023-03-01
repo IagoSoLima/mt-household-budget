@@ -1,0 +1,6 @@
+node_modules
+dist
+test
+package-lock.json
+.docker/pg_data
+.env
