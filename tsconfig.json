@@ -23,7 +23,8 @@
     "incremental": true,
     "strictNullChecks": true,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "typeRoots": ["./@types", "./node_modules/@types"]
   },
   "include": ["src"],
   "exclude": ["node_modules"]

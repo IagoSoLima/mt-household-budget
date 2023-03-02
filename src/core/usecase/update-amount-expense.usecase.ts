@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe';
-import type Expense from '../entity/expense.entity';
 import { type IExpenseRepository as ExpenseRepository } from '../repository/expense.repository.interface';
 import { type UpdateAmountExpenseParam } from './dto/update-amount-expense-param.dto';
 

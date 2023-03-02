@@ -8,7 +8,15 @@ export class ListExpenseUseCase {
   ) {}
 
   async execute() {
-    const expenses = await this.expenseRepository.getAll();
+    const now = new Date();
+    const actualInitCurrentDateMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1
+    );
+    const expenses = await this.expenseRepository.getAll(
+      actualInitCurrentDateMonth
+    );
     return expenses;
   }
 }
