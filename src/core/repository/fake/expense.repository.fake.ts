@@ -1,6 +1,9 @@
 import { randomInt } from 'crypto';
+import CategoryAdapter from '~/adapter/category.adapter';
+import ExpenseAdapter from '~/adapter/expense.datapert';
+import PaymentTypeAdapter from '~/adapter/payment-type.adapter';
 import Category from '~/core/entity/category.entity';
-import Expense from '~/core/entity/expense.entity';
+import type Expense from '~/core/entity/expense.entity';
 import PaymentType from '~/core/entity/payment-type.entity';
 import { type CreateExpense } from '../dto/create-expense.dto';
 import { type IExpenseRepository } from '../expense.repository.interface';
@@ -17,30 +20,59 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
       paymentType: paymentTypeParam
     } = params;
 
-    const category = new Category(
-      categoryParam.name,
-      categoryParam.description
-    );
-    category.setId(categoryParam.getId());
+    const category = CategoryAdapter.create(categoryParam);
+    category.id = categoryParam.id;
 
-    const paymentType = new PaymentType(paymentTypeParam.type);
-    paymentType.setId(1);
+    const paymentType = PaymentTypeAdapter.create(paymentTypeParam);
+    paymentType.id = 1;
 
-    const expense = new Expense(
+    const expense = ExpenseAdapter.create({
       amount,
       description,
       date,
       paymentType,
       category
-    );
-    expense.setId(randomInt(1000));
+    } as Expense);
+    expense.id = randomInt(1000);
 
     this.expenses.push(expense);
 
     return await Promise.resolve(expense);
   }
 
-  async getAll(): Promise<Expense[]> {
-    return await Promise.resolve(this.expenses);
+  async getAll(initialDateMounth: Date): Promise<Expense[]> {
+    return await Promise.resolve(
+      this.expenses.filter(
+        exp =>
+          new Date(exp.date).getMonth() ===
+          new Date(initialDateMounth).getMonth()
+      )
+    );
+  }
+
+  async getById(id: number): Promise<Expense | null> {
+    const index = this.expenses.findIndex(exp => exp.id === id);
+    if (index === -1) {
+      return null;
+    }
+    return await Promise.resolve(this.expenses[index]);
+  }
+
+  async update(id: number, params: CreateExpense): Promise<Expense> {
+    const {
+      amount,
+      date,
+      description,
+      category: categoryParam,
+      paymentType: paymentTypeParam
+    } = params;
+    const expense = this.expenses[id];
+
+    expense.amount = amount;
+    expense.description = description;
+    expense.date = date;
+    expense.category = CategoryAdapter.create(categoryParam);
+    expense.paymentType = PaymentTypeAdapter.create(paymentTypeParam);
+    return await Promise.resolve(expense);
   }
 }

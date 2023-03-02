@@ -1,5 +1,6 @@
 import { randomInt } from 'crypto';
-import Category from '~/core/entity/category.entity';
+import CategoryAdapter from '~/adapter/category.adapter';
+import type Category from '~/core/entity/category.entity';
 import { type ICategoryRepository } from '../category.repository.interface';
 import { type CreateCategory } from '../dto/create-category.dto';
 
@@ -7,9 +8,8 @@ export default class CategoryRepositoryFake implements ICategoryRepository {
   private readonly categories: Category[] = [];
 
   async create(params: CreateCategory): Promise<Category> {
-    const { description, name } = params;
-    const category = new Category(name, description);
-    category.setId(randomInt(1000));
+    const category = CategoryAdapter.create(params as Category);
+    category.id = randomInt(1000);
 
     this.categories.push(category);
 

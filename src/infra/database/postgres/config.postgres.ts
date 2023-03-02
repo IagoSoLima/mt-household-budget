@@ -17,15 +17,4 @@ const db = pgp({
   port: POSTGRES_PORT
 });
 
-// db.connect = async (): Promise<void> => {
-//   clientPg
-//     .connect()
-//     .then(() => {
-//       console.log('connected');
-//     })
-//     .catch(err => {
-//       console.error('connection error', err.stack);
-//     });
-// };
-
 export default db;

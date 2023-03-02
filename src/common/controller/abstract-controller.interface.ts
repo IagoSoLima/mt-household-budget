@@ -5,5 +5,6 @@ export default interface AbstractController {
   list: (params: any) => Promise<any>;
   store: (params: any) => Promise<any>;
   update?: (params: any) => Promise<any>;
+  patch: (params: any) => Promise<any>;
   delete?: (params: any) => Promise<any>;
 }

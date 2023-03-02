@@ -1,4 +1,5 @@
-import Category from '~/core/entity/category.entity';
+import CategoryAdapter from '~/adapter/category.adapter';
+import type Category from '~/core/entity/category.entity';
 import { type ICategoryRepository } from '~/core/repository/category.repository.interface';
 import { type CreateCategory } from '~/core/repository/dto/create-category.dto';
 import db from '~/infra/database/postgres/config.postgres';
@@ -13,8 +14,7 @@ export default class CategoryRepository implements ICategoryRepository {
       [name, description]
     );
 
-    console.log(insert);
-    const category = new Category(name, description);
+    const category = CategoryAdapter.create(params as Category);
     category.id = insert[0].id;
     return category;
   }

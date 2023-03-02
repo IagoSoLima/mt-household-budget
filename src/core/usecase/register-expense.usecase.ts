@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
+import CategoryAdapter from '~/adapter/category.adapter';
 import { IExpenseRepository as ExpenseRepository } from '~/core/repository/expense.repository.interface';
-import Category from '../entity/category.entity';
+import type Category from '../entity/category.entity';
 import { ICategoryRepository as CategoryRepository } from '../repository/category.repository.interface';
 import { IPaymentTypeRepository as PaymentTypeRepository } from '../repository/payment-type.repository.interface';
 import {
@@ -44,15 +45,10 @@ export class RegisterExpenseUseCase {
       throw new Error('Payment type not found');
     }
 
-    let category: Category = new Category(
-      categoryParam.name,
-      categoryParam.description
-    );
+    let category: Category = CategoryAdapter.create(categoryParam as Category);
     const foundCategory = await this.categoryRepository.getByName(
       categoryParam.name
     );
-
-    console.log(`Category: ${foundCategory}`, !!foundCategory, foundCategory);
 
     if (foundCategory !== null) {
       category.id = foundCategory.id;

@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import ExpressAdapter from '~/adapter/express.adapter';
-import { type CreditCardRequestDTO } from '~/controller/dto/expense-resquest.dto';
 import ExpenseController from '~/controller/expense.controller';
 import type Expense from '~/core/entity/expense.entity';
 import { type ResponseDTO } from '../../../../../common/dto/response.dto';
@@ -17,6 +16,12 @@ expenseRouter.post(
   '/',
   ExpressAdapter.create<ResponseDTO<{ expense: Expense }>>(
     ExpenseController.store
+  )
+);
+expenseRouter.patch(
+  '/:id',
+  ExpressAdapter.create<ResponseDTO<{ expense: Expense }>>(
+    ExpenseController.patch
   )
 );
 
