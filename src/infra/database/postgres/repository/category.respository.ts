@@ -1,0 +1,42 @@
+import Category from '~/core/entity/category.entity';
+import { type ICategoryRepository } from '~/core/repository/category.repository.interface';
+import { type CreateCategory } from '~/core/repository/dto/create-category.dto';
+import db from '~/infra/database/postgres/config.postgres';
+
+export default class CategoryRepository implements ICategoryRepository {
+  async create(params: CreateCategory): Promise<Category> {
+    const { description, name } = params;
+    await db.connect();
+
+    const insert = await db.query<Category>(
+      'INSERT INTO categorias(nome,descricao) VALUES ($1,$2) RETURNING *',
+      [name, description]
+    );
+
+    console.log(insert);
+    const category = new Category(name, description);
+    category.id = insert[0].id;
+    return category;
+  }
+
+  async getAll(): Promise<Category[] | []> {
+    await db.connect();
+
+    const categories = await db.manyOrNone<Category>(
+      'SELECT * FROM categorias'
+    );
+
+    return categories;
+  }
+
+  async getByName(name: string): Promise<Category | null> {
+    await db.connect();
+
+    const category = await db.oneOrNone<Category>(
+      'SELECT * FROM categorias WHERE nome = $1',
+      [name]
+    );
+
+    return category;
+  }
+}

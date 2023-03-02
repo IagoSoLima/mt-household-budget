@@ -2,6 +2,7 @@ import type Category from './category.entity';
 import type PaymentType from './payment-type.entity';
 
 export default class Expense {
+  id = 0;
   amount: number;
   description: string;
   date: Date;

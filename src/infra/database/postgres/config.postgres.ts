@@ -1,6 +1,5 @@
-import { Client } from 'pg';
+import pgPromise from 'pg-promise';
 import {
-  DATABASE_URL,
   POSTGRES_DB,
   POSTGRES_HOST,
   POSTGRES_PASSWORD,
@@ -8,7 +7,9 @@ import {
   POSTGRES_USER
 } from '~/infra/vars/app.vars';
 
-const clientPg = new Client({
+const pgp = pgPromise({});
+
+const db = pgp({
   host: POSTGRES_HOST,
   database: POSTGRES_DB,
   user: POSTGRES_USER,
@@ -16,5 +17,15 @@ const clientPg = new Client({
   port: POSTGRES_PORT
 });
 
-const db = clientPg;
+// db.connect = async (): Promise<void> => {
+//   clientPg
+//     .connect()
+//     .then(() => {
+//       console.log('connected');
+//     })
+//     .catch(err => {
+//       console.error('connection error', err.stack);
+//     });
+// };
+
 export default db;

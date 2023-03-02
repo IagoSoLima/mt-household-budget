@@ -9,7 +9,6 @@ export class ListExpenseUseCase {
 
   async execute() {
     const expenses = await this.expenseRepository.getAll();
-
     return expenses;
   }
 }

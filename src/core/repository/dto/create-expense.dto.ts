@@ -1,14 +1,10 @@
-interface expenseCategory {
-  name: string;
-  description: string;
-}
+import type Category from '~/core/entity/category.entity';
+import type PaymentType from '~/core/entity/payment-type.entity';
 
-type expensePaymentType = 'Cash' | 'Credit' | 'Debit' | 'PIX';
-
-export interface createExpenseDTO {
+export interface CreateExpense {
   amount: number;
   description: string;
   date: Date;
-  category: expenseCategory;
-  paymentType: expensePaymentType;
+  category: Category;
+  paymentType: PaymentType;
 }

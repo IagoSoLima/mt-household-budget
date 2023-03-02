@@ -1,12 +1,30 @@
 import { type RequestHandler } from 'express';
-import { type AbstractFunction } from '~/controller/abstract-controller.interface';
+import { type AbstractFunction } from '~/common/controller/abstract-controller.interface';
+import { ResponseDTO } from '~/common/dto/response.dto';
+import { camelizeKeys } from '~/common/util';
 
 const ExpressAdapter = {
-  create<T = any>(fn: AbstractFunction<T>): RequestHandler {
+  create<T = any>(fn: AbstractFunction): RequestHandler {
     return (req, res) => {
-      fn({ params: req.params, body: req.body })
-        .then(response => res.json(response))
-        .catch(err => res.status(err));
+      fn({ ...req.params, ...req.body, ...req.query })
+        .then(response => {
+          const responseDTO = ResponseDTO<T>;
+          res.json(responseDTO.factory(response));
+        })
+        .catch(err => {
+          console.log(err);
+          const responseDTO = ResponseDTO<T>;
+          res.json(responseDTO.factory(null, false));
+        });
+    };
+  },
+
+  camelizeDataParams(): RequestHandler {
+    return (req, res, next) => {
+      req.body = camelizeKeys(req.body);
+      req.params = camelizeKeys(req.params);
+      req.query = camelizeKeys(req.query);
+      next();
     };
   }
 };
