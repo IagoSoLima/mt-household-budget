@@ -3,6 +3,8 @@ import ExpenseAdapter from '~/adapter/expense.datapert';
 import PaymentTypeAdapter from '~/adapter/payment-type.adapter';
 import type Expense from '~/core/entity/expense.entity';
 import { type CreateExpense } from '~/core/repository/dto/create-expense.dto';
+import { type ListDefaultParam } from '~/core/repository/dto/list-default-param.dto';
+import { type ListExpenseParam } from '~/core/repository/dto/list-expense.dto';
 import { type IExpenseRepository } from '~/core/repository/expense.repository.interface';
 import db from '~/infra/database/postgres/config.postgres';
 
@@ -31,7 +33,7 @@ export default class ExpenseRepository implements IExpenseRepository {
     return expense;
   }
 
-  async getAll(initialDateMounth: Date): Promise<Expense[]> {
+  async getAll(params: ListDefaultParam): Promise<Expense[]> {
     await db.connect();
 
     const result = await db
@@ -41,9 +43,61 @@ export default class ExpenseRepository implements IExpenseRepository {
         FROM despesas AS d
         LEFT JOIN categorias AS c ON (d.categoria_id = c.id)
         LEFT JOIN tipos_pagamento AS tp ON (d.tipo_pagamento_id=tp.id)
-        WHERE  date_trunc('month',d.data_compra) = date_trunc('month', $1::date);
+        ORDER BY data_compra DESC
+
+        `
+      )
+      .catch(err => {
+        throw new Error(
+          `Could not be possible to register expense: ${err.message || err}`
+        );
+      });
+
+    const expenses = result.map(res => {
+      const category = CategoryAdapter.create({
+        name: res.categoria_nome,
+        description: res.categoria_descricao
+      });
+      const paymentType = PaymentTypeAdapter.create({
+        type: res.tipo_pagamento
+      });
+      category.id = res.categoria_id;
+      paymentType.id = res.tipo_pagamento_id;
+
+      const expense = ExpenseAdapter.create({
+        amount: res.valor,
+        description: res.descricao,
+        date: new Date(res.data_compra),
+        category,
+        paymentType
+      });
+      expense.id = res.id;
+
+      return expense;
+    });
+    return expenses;
+  }
+
+  async getByMonth({
+    initialDateMonth,
+    limit,
+    offset
+  }: ListExpenseParam): Promise<Expense[]> {
+    await db.connect();
+
+    const result = await db
+      .manyOrNone(
+        `
+        SELECT d.*,c.nome AS categoria_nome, c.descricao AS categoria_descricao, tp.tipo AS tipo_pagamento
+        FROM despesas AS d
+        LEFT JOIN categorias AS c ON (d.categoria_id = c.id)
+        LEFT JOIN tipos_pagamento AS tp ON (d.tipo_pagamento_id=tp.id)
+        WHERE  date_trunc('month',d.data_compra) = date_trunc('month', $1::date)
+        ORDER BY data_compra DESC
+        LIMIT $2
+        OFFSET $3
         `,
-        [initialDateMounth]
+        [initialDateMonth, limit, offset]
       )
       .catch(err => {
         throw new Error(

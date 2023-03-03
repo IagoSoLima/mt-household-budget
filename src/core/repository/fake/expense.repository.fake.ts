@@ -4,6 +4,8 @@ import ExpenseAdapter from '~/adapter/expense.datapert';
 import PaymentTypeAdapter from '~/adapter/payment-type.adapter';
 import type Expense from '~/core/entity/expense.entity';
 import { type CreateExpense } from '../dto/create-expense.dto';
+import { type ListDefaultParam } from '../dto/list-default-param.dto';
+import { type ListExpenseParam } from '../dto/list-expense.dto';
 import { type IExpenseRepository } from '../expense.repository.interface';
 
 export default class ExpenseRepositoryFake implements IExpenseRepository {
@@ -38,12 +40,16 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
     return await Promise.resolve(expense);
   }
 
-  async getAll(initialDateMounth: Date): Promise<Expense[]> {
+  async getAll(params: ListDefaultParam): Promise<Expense[]> {
+    return await Promise.resolve(this.expenses);
+  }
+
+  async getByMonth({ initialDateMonth }: ListExpenseParam): Promise<Expense[]> {
     return await Promise.resolve(
       this.expenses.filter(
         exp =>
           new Date(exp.date).getMonth() ===
-          new Date(initialDateMounth).getMonth()
+          new Date(initialDateMonth).getMonth()
       )
     );
   }

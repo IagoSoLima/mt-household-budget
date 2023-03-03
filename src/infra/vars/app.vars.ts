@@ -20,3 +20,5 @@ export const IS_DEV = !IS_TEST && !IS_PROD;
 
 export const MOCK_CONTAINER =
   JSON.parse(process.env.MOCK_CONTAINER ?? 'false') && (IS_TEST || IS_DEV);
+
+export const DEFAULT_PER_PAGE = null;

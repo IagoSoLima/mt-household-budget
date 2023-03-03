@@ -6,6 +6,7 @@ import { ListExpenseUseCase } from '~/core/usecase/list-expense.usecase';
 import { RegisterExpenseUseCase } from '~/core/usecase/register-expense.usecase';
 import { UpdateAmountExpenseUseCase } from '~/core/usecase/update-amount-expense.usecase';
 import { UpdateExpenseUseCase } from '~/core/usecase/update-expense.usecase';
+import { type ExpanceListParam } from './dto/expance-list-param.dto';
 import { type ExpensePatchParam } from './dto/expense-patch-param.dto';
 import { type ExpenseStoreParam } from './dto/expense-store-param.dto';
 import { type ExpenseUpdateParam } from './dto/expense-update-param.dto';
@@ -18,9 +19,9 @@ const ExpenseController: AbstractController = {
     return expense;
   },
 
-  async list(): Promise<any> {
+  async list(params: ExpanceListParam): Promise<any> {
     const listExpense = container.resolve(ListExpenseUseCase);
-    const expense = await listExpense.execute();
+    const expense = await listExpense.execute(params);
 
     return expense;
   },

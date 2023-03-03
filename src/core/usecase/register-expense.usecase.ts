@@ -46,8 +46,9 @@ export class RegisterExpenseUseCase {
     }
 
     let category: Category = CategoryAdapter.create(categoryParam as Category);
-    const foundCategory = await this.categoryRepository.getByName(
-      categoryParam.name
+    const foundCategory = await this.categoryRepository.getByNameAndDescription(
+      categoryParam.name,
+      categoryParam.description
     );
 
     if (foundCategory !== null) {
