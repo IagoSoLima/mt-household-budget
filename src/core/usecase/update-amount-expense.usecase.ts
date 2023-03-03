@@ -13,8 +13,6 @@ export class UpdateAmountExpenseUseCase {
     const { id, amount } = params;
     const expense = await this.expenseRepository.getById(id);
 
-    console.log('update usecase', expense);
-
     if (!expense) {
       throw new Error('Expense not found');
     }

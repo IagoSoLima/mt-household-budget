@@ -3,8 +3,12 @@ import { type AbstractFunction } from '~/common/controller/abstract-controller.i
 import { ResponseDTO } from '~/common/dto/response.dto';
 import { camelizeKeys } from '~/common/util';
 
+const DEFAULT_VALUE_FN = async () => {
+  await Promise.resolve({});
+};
+
 const ExpressAdapter = {
-  create<T = any>(fn: AbstractFunction): RequestHandler {
+  create<T = any>(fn: AbstractFunction = DEFAULT_VALUE_FN): RequestHandler {
     return (req, res) => {
       fn({ ...req.params, ...req.body, ...req.query })
         .then(response => {

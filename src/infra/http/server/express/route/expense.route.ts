@@ -25,4 +25,9 @@ expenseRouter.patch(
   )
 );
 
+expenseRouter.delete(
+  '/:id',
+  ExpressAdapter.create<ResponseDTO<void>>(ExpenseController.delete)
+);
+
 export default expenseRouter;

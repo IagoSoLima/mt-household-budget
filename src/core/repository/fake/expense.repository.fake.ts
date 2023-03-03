@@ -2,9 +2,7 @@ import { randomInt } from 'crypto';
 import CategoryAdapter from '~/adapter/category.adapter';
 import ExpenseAdapter from '~/adapter/expense.datapert';
 import PaymentTypeAdapter from '~/adapter/payment-type.adapter';
-import Category from '~/core/entity/category.entity';
 import type Expense from '~/core/entity/expense.entity';
-import PaymentType from '~/core/entity/payment-type.entity';
 import { type CreateExpense } from '../dto/create-expense.dto';
 import { type IExpenseRepository } from '../expense.repository.interface';
 
@@ -74,5 +72,16 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
     expense.category = CategoryAdapter.create(categoryParam);
     expense.paymentType = PaymentTypeAdapter.create(paymentTypeParam);
     return await Promise.resolve(expense);
+  }
+
+  async delete(id: number): Promise<void> {
+    const index = this.expenses.findIndex(exp => exp.id === id);
+    if (index === -1) {
+      return;
+    }
+    const expensesSliced = this.expenses.splice(index, 1);
+    console.log('delete', index, expensesSliced, this.expenses);
+
+    await Promise.resolve();
   }
 }

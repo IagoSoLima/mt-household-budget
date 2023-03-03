@@ -96,7 +96,6 @@ export default class ExpenseRepository implements IExpenseRepository {
           `Could not be possible getting expense: ${err.message || err}`
         );
       });
-    console.log('getbyId', result);
     const category = CategoryAdapter.create({
       name: result.categoria_nome,
       description: result.categoria_descricao
@@ -138,5 +137,14 @@ export default class ExpenseRepository implements IExpenseRepository {
 
     const expense = ExpenseAdapter.create(params);
     return expense;
+  }
+
+  async delete(id: number): Promise<void> {
+    await db.connect();
+    await db.query('DELETE FROM despesas WHERE id = $1', [id]).catch(err => {
+      throw new Error(
+        `Could not be possible remove expense: ${err.message || err}`
+      );
+    });
   }
 }

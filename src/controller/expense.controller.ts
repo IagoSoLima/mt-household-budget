@@ -1,6 +1,7 @@
 import { container } from 'tsyringe';
 import type AbstractController from '~/common/controller/abstract-controller.interface';
 import type Expense from '~/core/entity/expense.entity';
+import { DeleteExpenseUseCase } from '~/core/usecase/delete-expense.usecase';
 import { ListExpenseUseCase } from '~/core/usecase/list-expense.usecase';
 import { RegisterExpenseUseCase } from '~/core/usecase/register-expense.usecase';
 import { UpdateAmountExpenseUseCase } from '~/core/usecase/update-amount-expense.usecase';
@@ -25,6 +26,12 @@ const ExpenseController: AbstractController = {
   async patch(params: ExpensePatchParam): Promise<Expense> {
     const patchExpense = container.resolve(UpdateAmountExpenseUseCase);
     const expense = await patchExpense.execute(params);
+    return expense;
+  },
+
+  async delete({ id }: { id: number }): Promise<Expense> {
+    const deleteExpense = container.resolve(DeleteExpenseUseCase);
+    const expense = await deleteExpense.execute(id);
     return expense;
   }
 };

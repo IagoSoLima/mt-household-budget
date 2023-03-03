@@ -6,4 +6,5 @@ export interface IExpenseRepository {
   getById: (id: number) => Promise<Expense | null>;
   getAll: (initialDateMounth: Date) => Promise<Expense[] | []>;
   update: (id: number, params: CreateExpense) => Promise<Expense>;
+  delete: (id: number) => Promise<void>;
 }
