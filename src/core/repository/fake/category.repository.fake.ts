@@ -20,9 +20,15 @@ export default class CategoryRepositoryFake implements ICategoryRepository {
     return await Promise.resolve(this.categories);
   }
 
-  async getByName(name: string): Promise<Category | null> {
+  async getByNameAndDescription(
+    name: string,
+    description: string
+  ): Promise<Category | null> {
     const index = await Promise.resolve(
-      this.categories.findIndex(category => category.name === name)
+      this.categories.findIndex(
+        category =>
+          category.name === name && category.description === description
+      )
     );
 
     if (index < 0) return null;

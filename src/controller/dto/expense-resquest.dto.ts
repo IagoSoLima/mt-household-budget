@@ -7,7 +7,7 @@ interface ExpenseCategory {
   description: string;
 }
 
-export class CreditCardRequestDTO {
+export class ExpenseRequestDTO {
   amount!: number;
   description!: string;
   date!: Date;

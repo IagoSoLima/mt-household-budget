@@ -12,7 +12,6 @@ export class DeleteExpenseUseCase {
     const expense = await this.expenseRepository.getById(Number(id));
     const foundExpense = expense !== null;
 
-    console.log('execute', expense, foundExpense);
     if (!foundExpense) {
       throw new Error('Expense not found');
     }

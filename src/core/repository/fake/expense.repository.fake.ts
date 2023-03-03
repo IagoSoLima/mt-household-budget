@@ -64,13 +64,17 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
       category: categoryParam,
       paymentType: paymentTypeParam
     } = params;
-    const expense = this.expenses[id];
+    const index = this.expenses.findIndex(exp => exp.id === id);
+
+    const expense = this.expenses[index];
 
     expense.amount = amount;
     expense.description = description;
     expense.date = date;
     expense.category = CategoryAdapter.create(categoryParam);
     expense.paymentType = PaymentTypeAdapter.create(paymentTypeParam);
+    expense.category.id = categoryParam.id;
+    expense.paymentType.id = paymentTypeParam.id;
     return await Promise.resolve(expense);
   }
 
@@ -79,8 +83,7 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
     if (index === -1) {
       return;
     }
-    const expensesSliced = this.expenses.splice(index, 1);
-    console.log('delete', index, expensesSliced, this.expenses);
+    this.expenses.splice(index, 1);
 
     await Promise.resolve();
   }

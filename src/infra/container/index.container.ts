@@ -1,4 +1,5 @@
-import { MOCK_CONTAINER } from '../vars/app.vars';
+import 'reflect-metadata';
+import { MOCK_CONTAINER } from '~/infra/vars/app.vars';
 import containerFake from './app-fake.container';
 import container from './app.container';
 

@@ -5,8 +5,10 @@ import { DeleteExpenseUseCase } from '~/core/usecase/delete-expense.usecase';
 import { ListExpenseUseCase } from '~/core/usecase/list-expense.usecase';
 import { RegisterExpenseUseCase } from '~/core/usecase/register-expense.usecase';
 import { UpdateAmountExpenseUseCase } from '~/core/usecase/update-amount-expense.usecase';
+import { UpdateExpenseUseCase } from '~/core/usecase/update-expense.usecase';
 import { type ExpensePatchParam } from './dto/expense-patch-param.dto';
 import { type ExpenseStoreParam } from './dto/expense-store-param.dto';
+import { type ExpenseUpdateParam } from './dto/expense-update-param.dto';
 
 const ExpenseController: AbstractController = {
   async store(params: ExpenseStoreParam): Promise<Expense> {
@@ -29,9 +31,14 @@ const ExpenseController: AbstractController = {
     return expense;
   },
 
-  async delete({ id }: { id: number }): Promise<Expense> {
+  async delete({ id }: { id: number }): Promise<void> {
     const deleteExpense = container.resolve(DeleteExpenseUseCase);
-    const expense = await deleteExpense.execute(id);
+    await deleteExpense.execute(id);
+  },
+
+  async update({ id, ...rest }: ExpenseUpdateParam): Promise<Expense> {
+    const updateExpense = container.resolve(UpdateExpenseUseCase);
+    const expense = await updateExpense.execute({ id: Number(id), ...rest });
     return expense;
   }
 };

@@ -8,26 +8,25 @@ const expenseRouter = Router();
 
 expenseRouter.get(
   '/',
-  ExpressAdapter.create<ResponseDTO<{ expense: Expense }>>(
-    ExpenseController.list
-  )
+  ExpressAdapter.create<ResponseDTO<Expense[]>>(ExpenseController.list)
 );
 expenseRouter.post(
   '/',
-  ExpressAdapter.create<ResponseDTO<{ expense: Expense }>>(
-    ExpenseController.store
-  )
+  ExpressAdapter.create<ResponseDTO<Expense>>(ExpenseController.store)
 );
 expenseRouter.patch(
   '/:id',
-  ExpressAdapter.create<ResponseDTO<{ expense: Expense }>>(
-    ExpenseController.patch
-  )
+  ExpressAdapter.create<ResponseDTO<Expense>>(ExpenseController.patch)
 );
 
 expenseRouter.delete(
   '/:id',
-  ExpressAdapter.create<ResponseDTO<void>>(ExpenseController.delete)
+  ExpressAdapter.create<ResponseDTO>(ExpenseController.delete)
+);
+
+expenseRouter.put(
+  '/:id',
+  ExpressAdapter.create<ResponseDTO<Expense>>(ExpenseController.update)
 );
 
 export default expenseRouter;

@@ -29,12 +29,15 @@ export default class CategoryRepository implements ICategoryRepository {
     return categories;
   }
 
-  async getByName(name: string): Promise<Category | null> {
+  async getByNameAndDescription(
+    name: string,
+    description: string
+  ): Promise<Category | null> {
     await db.connect();
 
     const category = await db.oneOrNone<Category>(
-      'SELECT * FROM categorias WHERE nome = $1',
-      [name]
+      'SELECT * FROM categorias WHERE nome = $1 AND descricao = $2',
+      [name, description]
     );
 
     return category;
