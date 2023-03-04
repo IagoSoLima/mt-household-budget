@@ -40,7 +40,7 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
     return await Promise.resolve(expense);
   }
 
-  async getAll(params: ListDefaultParam): Promise<Expense[]> {
+  async getAll(params?: ListDefaultParam): Promise<Expense[]> {
     return await Promise.resolve(this.expenses);
   }
 

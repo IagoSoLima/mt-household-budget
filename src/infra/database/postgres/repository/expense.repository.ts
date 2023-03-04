@@ -33,7 +33,7 @@ export default class ExpenseRepository implements IExpenseRepository {
     return expense;
   }
 
-  async getAll(params: ListDefaultParam): Promise<Expense[]> {
+  async getAll(params?: ListDefaultParam): Promise<Expense[]> {
     await db.connect();
 
     const result = await db

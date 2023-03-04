@@ -6,6 +6,7 @@ declare module 'process' {
 
         APP_PORT: number;
         APP_CONTAINER_NAME: string;
+        APP_HOST_URL: string;
         DATABASE_CONTAINER_NAME: string;
 
         POSTGRES_DB: string;

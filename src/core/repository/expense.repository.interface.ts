@@ -6,7 +6,7 @@ import { type ListExpenseParam } from './dto/list-expense.dto';
 export interface IExpenseRepository {
   create: (params: CreateExpense) => Promise<Expense>;
   getById: (id: number) => Promise<Expense | null>;
-  getAll: (param: ListDefaultParam) => Promise<Expense[] | []>;
+  getAll: (param?: ListDefaultParam) => Promise<Expense[] | []>;
   getByMonth: (param: ListExpenseParam) => Promise<Expense[] | []>;
   update: (id: number, params: CreateExpense) => Promise<Expense>;
   delete: (id: number) => Promise<void>;

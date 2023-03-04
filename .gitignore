@@ -4,3 +4,5 @@ test
 package-lock.json
 .docker/pg_data
 .env
+tmp/*
+!tmp/uploads/.gitkeep

@@ -1,10 +1,16 @@
 import { container } from 'tsyringe';
+import { type IPdfProvider } from '~/core/providers/pdf.provider.interface';
+import { type IStorageProvider } from '~/core/providers/storage.provider.interface';
+import { type ITemplateProvider } from '~/core/providers/template.provider.interface';
 import { type ICategoryRepository } from '~/core/repository/category.repository.interface';
 import { type IExpenseRepository } from '~/core/repository/expense.repository.interface';
 import { type IPaymentTypeRepository } from '~/core/repository/payment-type.repository.interface';
 import CategoryRepository from '~/infra/database/postgres/repository/category.respository';
 import ExpenseRepository from '~/infra/database/postgres/repository/expense.repository';
-import PaymentTypeRepository from '../database/postgres/repository/payment-type.repository';
+import PaymentTypeRepository from '~/infra/database/postgres/repository/payment-type.repository';
+import PuppeteerProviderPdf from '~/infra/providers/pdf/puppeteer.provider.pdf';
+import DiskStorageProvider from '~/infra/providers/storage/disk.storage.provider';
+import HandlebarsTemplateProvider from '~/infra/providers/template/handlebars.template.provider';
 
 const ContainerFake = {
   make() {
@@ -21,6 +27,19 @@ const ContainerFake = {
     container.registerSingleton<IPaymentTypeRepository>(
       'PaymentTypeRepository',
       PaymentTypeRepository
+    );
+
+    container.registerSingleton<IPdfProvider>(
+      'PdfProvider',
+      PuppeteerProviderPdf
+    );
+    container.registerSingleton<IStorageProvider>(
+      'StorageProvider',
+      DiskStorageProvider
+    );
+    container.registerSingleton<ITemplateProvider>(
+      'TemplateProvider',
+      HandlebarsTemplateProvider
     );
   }
 };

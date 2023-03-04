@@ -1,10 +1,12 @@
 import * as dotenv from 'dotenv';
+import path from 'path';
 dotenv.config();
 
 export const NODE_ENV = process.env.NODE_ENV;
 
 export const APP_PORT = process.env.APP_PORT;
 export const APP_CONTAINER_NAME = process.env.APP_CONTAINER_NAME;
+export const APP_HOST_URL = process.env.APP_HOST_URL ?? 'http://localhost';
 
 export const POSTGRES_DB = process.env.POSTGRES_DB ?? '';
 export const POSTGRES_USER = process.env.POSTGRES_USER ?? '';
@@ -22,3 +24,13 @@ export const MOCK_CONTAINER =
   JSON.parse(process.env.MOCK_CONTAINER ?? 'false') && (IS_TEST || IS_DEV);
 
 export const DEFAULT_PER_PAGE = null;
+
+export const TEMPLATE_FOLDER = path.resolve(
+  __dirname,
+  '..',
+  'providers',
+  'template',
+  'view'
+);
+export const TMP_FOLDER = path.resolve(__dirname, '..', '..', '..', 'tmp');
+export const UPLOADS_FOLDER = path.resolve(TMP_FOLDER, 'uploads');

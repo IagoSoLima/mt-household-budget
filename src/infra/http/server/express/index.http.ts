@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express, { type Express } from 'express';
 import helmet from 'helmet';
-import { APP_PORT } from '~/infra/vars/app.vars';
+import { APP_HOST_URL, APP_PORT, UPLOADS_FOLDER } from '~/infra/vars/app.vars';
 import routes from './route/index.route';
 
 export default function bootstrap() {
@@ -13,10 +13,11 @@ export default function bootstrap() {
   app.use(express.json());
 
   app.use('/api', routes);
+  app.use('/files', express.static(UPLOADS_FOLDER));
 
   app.listen(port, () => {
     console.log(
-      `Api listening at http://localhost:${port} 🙌 with express`,
+      `Api listening at ${APP_HOST_URL}:${port} 🙌 with express`,
       'Main'
     );
   });
