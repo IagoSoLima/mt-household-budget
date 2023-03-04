@@ -4,6 +4,6 @@ import { ExpensePdfController } from '~/controller/expense-pdf.controller';
 
 const expensePdfRouter = Router();
 
-expensePdfRouter.get('/', ExpressAdapter.create(ExpensePdfController.get));
+expensePdfRouter.post('/', ExpressAdapter.create(ExpensePdfController.store));
 
 export default expensePdfRouter;

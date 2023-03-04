@@ -3,6 +3,7 @@ import path from 'path';
 import { type IStorageProvider } from '~/core/providers/storage.provider.interface';
 import {
   APP_HOST_URL,
+  APP_PORT,
   TMP_FOLDER,
   UPLOADS_FOLDER
 } from '~/infra/vars/app.vars';
@@ -18,13 +19,11 @@ export default class DiskStorageProvider implements IStorageProvider {
       function (err) {
         if (err) {
           console.log(err);
-        } else {
-          console.log('The file was saved!');
         }
       }
     );
 
-    return APP_HOST_URL + '/files/' + fileName;
+    return `${APP_HOST_URL}:${APP_PORT}/files/${fileName}`;
   }
 
   public async deleteFile(file: string): Promise<void> {
