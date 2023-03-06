@@ -101,8 +101,6 @@ export class RegisterExpenseUseCase {
       place
     });
 
-    console.log(expense);
-
     return expense;
   }
 }

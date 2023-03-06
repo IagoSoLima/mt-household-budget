@@ -27,8 +27,10 @@ const ExpenseController: AbstractController = {
   },
 
   async patch(params: ExpensePatchParam): Promise<Expense> {
+    const { id, ...rest } = params;
+
     const patchExpense = container.resolve(UpdateAmountExpenseUseCase);
-    const expense = await patchExpense.execute(params);
+    const expense = await patchExpense.execute({ id: Number(id), ...rest });
     return expense;
   },
 

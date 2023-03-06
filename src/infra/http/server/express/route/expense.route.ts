@@ -15,7 +15,7 @@ expenseRouter.post(
   ExpressAdapter.create<ResponseDTO<Expense>>(ExpenseController.store)
 );
 expenseRouter.patch(
-  '/:id',
+  '/valor',
   ExpressAdapter.create<ResponseDTO<Expense>>(ExpenseController.patch)
 );
 
@@ -25,7 +25,7 @@ expenseRouter.delete(
 );
 
 expenseRouter.put(
-  '/:id',
+  '/',
   ExpressAdapter.create<ResponseDTO<Expense>>(ExpenseController.update)
 );
 

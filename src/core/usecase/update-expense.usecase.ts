@@ -1,10 +1,14 @@
 import { waitForDebugger } from 'inspector';
 import { inject, injectable } from 'tsyringe';
 import CategoryAdapter from '~/adapter/category.adapter';
+import { removeMask } from '~/common/util';
 import { ICategoryRepository as CategoryRepository } from '~/core/repository/category.repository.interface';
 import { IExpenseRepository as ExpenseRepository } from '~/core/repository/expense.repository.interface';
 import { IPaymentTypeRepository as PaymentTypeRepository } from '~/core/repository/payment-type.repository.interface';
 import type Category from '../entity/category.entity';
+import type Place from '../entity/place.entity';
+import { ICepProvider as CepProvider } from '../providers/cep.provider.interface';
+import { IPlaceRepository as PlaceRepository } from '../repository/place.repository.interface';
 import {
   type ChargePaymentType,
   type UpdateExpenseParam
@@ -20,7 +24,13 @@ export class UpdateExpenseUseCase {
     private readonly paymentTypeRepository: PaymentTypeRepository,
 
     @inject('CategoryRepository')
-    private readonly categoryRepository: CategoryRepository
+    private readonly categoryRepository: CategoryRepository,
+
+    @inject('CepProvider')
+    private readonly cepProvider: CepProvider,
+
+    @inject('PlaceRepository')
+    private readonly placeRepository: PlaceRepository
   ) {}
 
   async execute(params: UpdateExpenseParam) {
@@ -30,7 +40,8 @@ export class UpdateExpenseUseCase {
       description,
       date,
       paymentType: paymentTypeParam,
-      category: categoryParam
+      category: categoryParam,
+      place: placeParam
     } = params;
     const expense = await this.expenseRepository.getById(id);
     const foundExpense = expense !== null;
@@ -70,11 +81,33 @@ export class UpdateExpenseUseCase {
       });
     }
 
+    const zipCodeRemovedMask = removeMask({ value: placeParam.cep });
+    let place: Place;
+    const foundPlace = await this.placeRepository.getByZipCodeAndNumber(
+      zipCodeRemovedMask,
+      placeParam.number
+    );
+
+    if (foundPlace !== null) {
+      place = foundPlace;
+    } else {
+      const resultCepProvider = await this.cepProvider.get(zipCodeRemovedMask);
+      place = await this.placeRepository.create({
+        number: placeParam.number,
+        zipCode: zipCodeRemovedMask,
+        city: resultCepProvider.city,
+        neighborhood: resultCepProvider.neighborhood,
+        publicPlace: resultCepProvider.publicPlace,
+        uf: resultCepProvider.uf
+      });
+    }
+
     expense.amount = amount;
     expense.description = description;
     expense.date = date;
     expense.paymentType = paymentType;
     expense.category = category;
+    expense.place = place;
 
     const expenseUpdated = await this.expenseRepository.update(id, expense);
 

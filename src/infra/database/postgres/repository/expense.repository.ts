@@ -148,10 +148,12 @@ export default class ExpenseRepository implements IExpenseRepository {
     const result = await db
       .oneOrNone(
         `
-        SELECT d.*,c.nome AS categoria_nome, c.descricao AS categoria_descricao, tp.tipo AS tipo_pagamento
+        SELECT d.*,c.nome AS categoria_nome, c.descricao AS categoria_descricao, tp.tipo AS tipo_pagamento,
+        e.cep AS estabelecimento_cep, e.cidade AS estabelecimento_cidade, e.uf AS estabelecimento_uf, e.bairro AS estabelecimento_bairro, e.numero AS estabelecimento_numero, e.lougradouro AS estabelecimento_lougradouro
         FROM despesas AS d
         LEFT JOIN categorias AS c ON (d.categoria_id = c.id)
         LEFT JOIN tipos_pagamento AS tp ON (d.tipo_pagamento_id = tp.id)
+        LEFT JOIN estabelecimento AS e ON (d.estabelecimento_id = e.id)
         WHERE d.id = $1;
       `,
         [id]
@@ -168,15 +170,26 @@ export default class ExpenseRepository implements IExpenseRepository {
     const paymentType = PaymentTypeAdapter.create({
       type: result.tipo_pagamento
     });
+    const place = PlaceAdapter.create({
+      city: result.estabelecimento_cidade,
+      neighborhood: result.estabelecimento_bairro,
+      number: result.estabelecimento_numero,
+      publicPlace: result.estabelecimento_lougradouro,
+      uf: result.estabelecimento_uf,
+      zipCode: result.estabelecimento_cep
+    });
+
     category.id = result.categoria_id;
     paymentType.id = result.tipo_pagamento_id;
+    place.id = result.estabelecimento_id;
 
     const expense = ExpenseAdapter.create({
       amount: result.valor,
       description: result.descricao,
       date: new Date(result.data_compra),
       category,
-      paymentType
+      paymentType,
+      place
     } as Expense);
     expense.id = id;
 
@@ -201,6 +214,9 @@ export default class ExpenseRepository implements IExpenseRepository {
       });
 
     const expense = ExpenseAdapter.create(params as Expense);
+
+    expense.id = id;
+
     return expense;
   }
 
