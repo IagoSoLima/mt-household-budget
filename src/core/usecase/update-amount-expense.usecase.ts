@@ -19,8 +19,6 @@ export class UpdateAmountExpenseUseCase {
       throw new Error('Expense not found');
     }
 
-    console.log('e', expense);
-
     expense.amount = amount;
 
     const expenseUpdated = await this.expenseRepository.update(id, expense);

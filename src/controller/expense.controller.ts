@@ -1,5 +1,6 @@
 import { container } from 'tsyringe';
 import type AbstractController from '~/common/controller/abstract-controller.interface';
+import { transformToPlainObject } from '~/common/util';
 import type Expense from '~/core/entity/expense.entity';
 import { DeleteExpenseUseCase } from '~/core/usecase/delete-expense.usecase';
 import { ListExpenseUseCase } from '~/core/usecase/list-expense.usecase';
@@ -15,15 +16,15 @@ const ExpenseController: AbstractController = {
   async store(params: ExpenseStoreParam): Promise<Expense> {
     const createExpense = container.resolve(RegisterExpenseUseCase);
     const expense = await createExpense.execute(params);
-
-    return expense;
+    const expenseInPlainObject = transformToPlainObject<Expense>(expense);
+    return expenseInPlainObject as Expense;
   },
 
   async list(params: ExpanceListParam): Promise<any> {
     const listExpense = container.resolve(ListExpenseUseCase);
     const expense = await listExpense.execute(params);
-
-    return expense;
+    const expenseInPlainObject = transformToPlainObject(expense);
+    return expenseInPlainObject as Expense;
   },
 
   async patch(params: ExpensePatchParam): Promise<Expense> {
@@ -31,7 +32,8 @@ const ExpenseController: AbstractController = {
 
     const patchExpense = container.resolve(UpdateAmountExpenseUseCase);
     const expense = await patchExpense.execute({ id: Number(id), ...rest });
-    return expense;
+    const expenseInPlainObject = transformToPlainObject(expense);
+    return expenseInPlainObject as Expense;
   },
 
   async delete({ id }: { id: number }): Promise<void> {
@@ -42,7 +44,8 @@ const ExpenseController: AbstractController = {
   async update({ id, ...rest }: ExpenseUpdateParam): Promise<Expense> {
     const updateExpense = container.resolve(UpdateExpenseUseCase);
     const expense = await updateExpense.execute({ id: Number(id), ...rest });
-    return expense;
+    const expenseInPlainObject = transformToPlainObject(expense);
+    return expenseInPlainObject as Expense;
   }
 };
 

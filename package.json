@@ -16,6 +16,7 @@
   "description": "",
   "dependencies": {
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
     "dotenv": "^16.0.3",

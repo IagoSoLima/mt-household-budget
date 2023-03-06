@@ -2,9 +2,9 @@ import { Expose } from 'class-transformer';
 
 export type PaymentType = 'Cash' | 'Credit' | 'Debit' | 'PIX';
 
-interface ExpenseCategory {
-  name: string;
-  description: string;
+class ExpenseCategory {
+  name!: string;
+  description!: string;
 }
 
 export class ExpenseRequestDTO {
