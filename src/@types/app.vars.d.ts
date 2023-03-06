@@ -19,6 +19,7 @@ declare module 'process' {
 
         MOCK_CONTAINER: 'true' | 'false';
         PUPPETEER_EXECUTABLE_PATH: string;
+        VIA_CEP_API_URL: string;
       }
     }
   }

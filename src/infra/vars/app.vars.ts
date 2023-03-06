@@ -24,6 +24,7 @@ export const MOCK_CONTAINER =
   JSON.parse(process.env.MOCK_CONTAINER ?? 'false') && (IS_TEST || IS_DEV);
 
 export const PUPPETEER_EXECUTABLE_PATH = process.env.PUPPETEER_EXECUTABLE_PATH;
+export const VIA_CEP_API_URL = process.env.VIA_CEP_API_URL;
 
 export const DEFAULT_PER_PAGE = null;
 

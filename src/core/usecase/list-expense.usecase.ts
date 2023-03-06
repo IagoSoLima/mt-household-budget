@@ -29,6 +29,8 @@ export class ListExpenseUseCase {
       limit,
       offset
     };
+    const viacep = await fetch('https://viacep.com.br/ws/01001000/json/');
+    console.log(await viacep.json());
     const expenses = await this.expenseRepository.getByMonth(paramsRepository);
     return expenses;
   }
