@@ -1,19 +1,11 @@
 import { randomUUID } from 'crypto';
-import fs from 'fs';
-import path from 'path';
 import { inject, injectable } from 'tsyringe';
-import { format } from 'util';
-import { transformToMoney } from '~/common/util';
-import { DateUtil } from '~/common/util/date';
+import { transformToMoney, DateUtil } from '~/common/util';
 import {
   type DataExpenseDataTemplate,
   type IExpenseDataTemplate
 } from '~/infra/providers/template/view/expense-data.template.interface';
-import {
-  TEMPLATE_FOLDER,
-  TMP_FOLDER,
-  UPLOADS_FOLDER
-} from '~/infra/vars/app.vars';
+import { TEMPLATE_FOLDER } from '~/infra/vars/app.vars';
 import { IPdfProvider as PdfProvider } from '../providers/pdf.provider.interface';
 import { IStorageProvider as StorageProvider } from '../providers/storage.provider.interface';
 import { ITemplateProvider as TemplateProvider } from '../providers/template.provider.interface';

@@ -1,7 +1,7 @@
 import { type RequestHandler } from 'express';
 import { type AbstractFunction } from '~/common/controller/abstract-controller.interface';
 import { ResponseDTO } from '~/common/dto/response.dto';
-import { camelizeKeys } from '~/common/util';
+import { camelizeKeys, snakeKeys } from '~/common/util';
 
 const DEFAULT_VALUE_FN = async () => {
   await Promise.resolve({});

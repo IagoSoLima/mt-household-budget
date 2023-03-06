@@ -5,6 +5,10 @@ interface ExpenseCategory {
   description: string;
 }
 
+interface ExpensePlace {
+  cep: string;
+  number: number;
+}
 export interface ExpenseStoreParam {
   amount: number;
   description: string;
@@ -12,4 +16,5 @@ export interface ExpenseStoreParam {
 
   paymentType: PaymentType;
   category: ExpenseCategory;
+  place: ExpensePlace;
 }

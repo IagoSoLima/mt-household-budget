@@ -1,7 +1,7 @@
 export interface IGetCep {
-  cep: string;
-  rua: string;
-  bairro: string;
-  estado: string;
+  zipCode: string;
+  publicPlace: string;
+  neighborhood: string;
+  city: string;
   uf: string;
 }

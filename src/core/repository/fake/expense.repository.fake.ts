@@ -2,6 +2,7 @@ import { randomInt } from 'crypto';
 import CategoryAdapter from '~/adapter/category.adapter';
 import ExpenseAdapter from '~/adapter/expense.datapert';
 import PaymentTypeAdapter from '~/adapter/payment-type.adapter';
+import PlaceAdapter from '~/adapter/place.adapter';
 import type Expense from '~/core/entity/expense.entity';
 import { type CreateExpense } from '../dto/create-expense.dto';
 import { type ListDefaultParam } from '../dto/list-default-param.dto';
@@ -18,14 +19,18 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
       date,
       description,
       category: categoryParam,
-      paymentType: paymentTypeParam
+      paymentType: paymentTypeParam,
+      place: placeParam
     } = params;
 
     const category = CategoryAdapter.create(categoryParam);
     category.id = categoryParam.id;
 
     const paymentType = PaymentTypeAdapter.create(paymentTypeParam);
-    paymentType.id = 1;
+    paymentType.id = paymentTypeParam.id;
+
+    const place = PlaceAdapter.create(placeParam);
+    place.id = placeParam.id;
 
     const expense = ExpenseAdapter.create({
       amount,
@@ -82,7 +87,8 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
       date,
       description,
       category: categoryParam,
-      paymentType: paymentTypeParam
+      paymentType: paymentTypeParam,
+      place: placeParam
     } = params;
     const index = this.expenses.findIndex(exp => exp.id === id);
 
@@ -93,8 +99,10 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
     expense.date = date;
     expense.category = CategoryAdapter.create(categoryParam);
     expense.paymentType = PaymentTypeAdapter.create(paymentTypeParam);
+    expense.place = PlaceAdapter.create(placeParam);
     expense.category.id = categoryParam.id;
     expense.paymentType.id = paymentTypeParam.id;
+    expense.place.id = placeParam.id;
     return await Promise.resolve(expense);
   }
 

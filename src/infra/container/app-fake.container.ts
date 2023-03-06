@@ -1,4 +1,6 @@
 import { container } from 'tsyringe';
+import { type ICepProvider } from '~/core/providers/cep.provider.interface';
+import CepProviderFake from '~/core/providers/fake/cep.provider.fake';
 import PdfProviderFake from '~/core/providers/fake/pdf.provider.fake';
 import StorageProviderFake from '~/core/providers/fake/storage.provider.fake';
 import TemplateProviderFake from '~/core/providers/fake/template.provider.fake';
@@ -10,7 +12,9 @@ import { type IExpenseRepository } from '~/core/repository/expense.repository.in
 import CategoryRepositoryFake from '~/core/repository/fake/category.repository.fake';
 import ExpenseRepositoryFake from '~/core/repository/fake/expense.repository.fake';
 import PaymentTypeRepositoryFake from '~/core/repository/fake/payment-type.repository.fake';
+import PlaceRepositoryFake from '~/core/repository/fake/place.repository.fake';
 import { type IPaymentTypeRepository } from '~/core/repository/payment-type.repository.interface';
+import { type IPlaceRepository } from '~/core/repository/place.repository.interface';
 
 const Container = {
   make() {
@@ -28,6 +32,10 @@ const Container = {
       'PaymentTypeRepository',
       PaymentTypeRepositoryFake
     );
+    container.registerSingleton<IPlaceRepository>(
+      'PlaceRepository',
+      PlaceRepositoryFake
+    );
 
     container.registerSingleton<IPdfProvider>('PdfProvider', PdfProviderFake);
     container.registerSingleton<IStorageProvider>(
@@ -38,6 +46,7 @@ const Container = {
       'TemplateProvider',
       TemplateProviderFake
     );
+    container.registerSingleton<ICepProvider>('CepProvider', CepProviderFake);
   }
 };
 export default Container;
