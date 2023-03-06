@@ -3,13 +3,13 @@ import * as fs from 'fs';
 import path from 'path';
 import * as puppeteer from 'puppeteer';
 import { type IPdfProvider } from '~/core/providers/pdf.provider.interface';
-import { IS_PROD, UPLOADS_FOLDER } from '~/infra/vars/app.vars';
+import { IS_PROD, PUPPETEER_EXECUTABLE_PATH } from '~/infra/vars/app.vars';
 
 export default class PuppeteerProviderPdf implements IPdfProvider {
   async generate(template: string): Promise<string | Uint8Array | Buffer> {
     const browser = await puppeteer.launch({
       headless: !IS_PROD,
-      executablePath: '/usr/bin/google-chrome',
+      executablePath: PUPPETEER_EXECUTABLE_PATH,
       args: [
         '--disable-gpu',
         '--disable-dev-shm-usage',

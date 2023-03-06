@@ -18,6 +18,7 @@ import { IPdfProvider as PdfProvider } from '../providers/pdf.provider.interface
 import { IStorageProvider as StorageProvider } from '../providers/storage.provider.interface';
 import { ITemplateProvider as TemplateProvider } from '../providers/template.provider.interface';
 import { IExpenseRepository as ExpenseRepository } from '../repository/expense.repository.interface';
+import { type GenerateExpensePdf } from './dto/generate-expense-pdf.dto';
 
 @injectable()
 export default class GeneratePdfExpenseUseCase {
@@ -32,9 +33,19 @@ export default class GeneratePdfExpenseUseCase {
     private readonly storageProvider: StorageProvider
   ) {}
 
-  async execute(): Promise<string> {
-    const expenses = await this.expenseRepository.getAll();
-    const dataTemplate: IExpenseDataTemplate[] = [];
+  async execute({
+    initialDate,
+    finishedDate
+  }: GenerateExpensePdf): Promise<string> {
+    const expenses = await this.expenseRepository.getByRangeDate({
+      initialDate: new Date(initialDate),
+      finishedDate: new Date(finishedDate)
+    });
+    const dataTemplate: IExpenseDataTemplate = {
+      initialDate: DateUtil.format(new Date(initialDate), 'dd/MM/yyyy'),
+      finishedDate: DateUtil.format(new Date(finishedDate), 'dd/MM/yyyy'),
+      info: []
+    } as IExpenseDataTemplate;
 
     for (const expense of expenses) {
       const date = DateUtil.format(expense.date, 'yyyy-MM-dd');
@@ -47,16 +58,16 @@ export default class GeneratePdfExpenseUseCase {
         description: expense.description
       };
 
-      const index = dataTemplate.findIndex(
+      const index = dataTemplate.info.findIndex(
         data => data.month === month && data.year === year
       );
 
       if (index !== -1) {
-        dataTemplate[index].data.push(data);
+        dataTemplate.info[index].data.push(data);
         continue;
       }
 
-      dataTemplate.push({
+      dataTemplate.info.push({
         month,
         year,
         data: [data]

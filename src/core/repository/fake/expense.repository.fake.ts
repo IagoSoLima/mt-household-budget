@@ -6,6 +6,7 @@ import type Expense from '~/core/entity/expense.entity';
 import { type CreateExpense } from '../dto/create-expense.dto';
 import { type ListDefaultParam } from '../dto/list-default-param.dto';
 import { type ListExpenseParam } from '../dto/list-expense.dto';
+import { type ListRangeDateParam } from '../dto/list-range-date-param.dto';
 import { type IExpenseRepository } from '../expense.repository.interface';
 
 export default class ExpenseRepositoryFake implements IExpenseRepository {
@@ -50,6 +51,19 @@ export default class ExpenseRepositoryFake implements IExpenseRepository {
         exp =>
           new Date(exp.date).getMonth() ===
           new Date(initialDateMonth).getMonth()
+      )
+    );
+  }
+
+  async getByRangeDate({
+    initialDate,
+    finishedDate
+  }: ListRangeDateParam): Promise<Expense[] | []> {
+    return await Promise.resolve(
+      this.expenses.filter(
+        exp =>
+          new Date(exp.date).getTime() >= new Date(initialDate).getTime() &&
+          new Date(exp.date).getTime() <= new Date(finishedDate).getTime()
       )
     );
   }

@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { isNumber } from '~/common/util/is-number.util';
 import { type ListExpenseParam as ListExpenseRepositoryParam } from '~/core/repository/dto/list-expense.dto';
 import { IExpenseRepository as ExpenseRepository } from '~/core/repository/expense.repository.interface';
 import { DEFAULT_PER_PAGE } from '~/infra/vars/app.vars';
@@ -18,7 +19,7 @@ export class ListExpenseUseCase {
       1
     );
     const limit = params.perPage ?? DEFAULT_PER_PAGE;
-    let page = params.page ?? 0;
+    let page = params.page ?? 1;
     page = page - 1;
 
     const offset = page && limit ? page * limit : null;

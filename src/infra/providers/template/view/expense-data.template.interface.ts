@@ -4,8 +4,14 @@ export interface DataExpenseDataTemplate {
   amount: string;
 }
 
-export interface IExpenseDataTemplate {
+export interface InfoExpenseTemplate {
   month: string;
   year: string;
   data: DataExpenseDataTemplate[];
+}
+
+export interface IExpenseDataTemplate {
+  initialDate: string;
+  finishedDate: string;
+  info: InfoExpenseTemplate[];
 }

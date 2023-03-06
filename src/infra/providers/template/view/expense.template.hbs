@@ -13,10 +13,14 @@
 
 <main>
   <h1>Suas Despesas</h1>
-  <p>Abaixo está a lista com todas as suas despesas:</p>
+  <p>Abaixo está a lista com todas as suas despesas entre os dias
+    <br />
+    {{data.initialDate}}
+    -
+    {{data.finishedDate}}:</p>
 
   <div class='data'>
-    {{#each data as |monthData|}}
+    {{#each data.info as |monthData|}}
       <div class='month'>
         <strong>{{month}}/{{year}}</strong>
         <table>

@@ -18,6 +18,7 @@ declare module 'process' {
         DATABASE_URL: string;
 
         MOCK_CONTAINER: 'true' | 'false';
+        PUPPETEER_EXECUTABLE_PATH: string;
       }
     }
   }

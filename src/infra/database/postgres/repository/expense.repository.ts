@@ -5,6 +5,7 @@ import type Expense from '~/core/entity/expense.entity';
 import { type CreateExpense } from '~/core/repository/dto/create-expense.dto';
 import { type ListDefaultParam } from '~/core/repository/dto/list-default-param.dto';
 import { type ListExpenseParam } from '~/core/repository/dto/list-expense.dto';
+import { type ListRangeDateParam } from '~/core/repository/dto/list-range-date-param.dto';
 import { type IExpenseRepository } from '~/core/repository/expense.repository.interface';
 import db from '~/infra/database/postgres/config.postgres';
 
@@ -35,7 +36,6 @@ export default class ExpenseRepository implements IExpenseRepository {
 
   async getAll(params?: ListDefaultParam): Promise<Expense[]> {
     await db.connect();
-
     const result = await db
       .manyOrNone(
         `
@@ -200,5 +200,53 @@ export default class ExpenseRepository implements IExpenseRepository {
         `Could not be possible remove expense: ${err.message || err}`
       );
     });
+  }
+
+  async getByRangeDate({
+    finishedDate,
+    initialDate
+  }: ListRangeDateParam): Promise<Expense[] | []> {
+    await db.connect();
+    const result = await db
+      .manyOrNone(
+        `
+      SELECT d.*,c.nome AS categoria_nome, c.descricao AS categoria_descricao, tp.tipo AS tipo_pagamento
+      FROM despesas AS d
+      LEFT JOIN categorias AS c ON (d.categoria_id = c.id)
+      LEFT JOIN tipos_pagamento AS tp ON (d.tipo_pagamento_id=tp.id)
+      WHERE d.data_compra between $1::date and $2::date
+      ORDER BY data_compra DESC
+      `,
+        [initialDate, finishedDate]
+      )
+      .catch(err => {
+        throw new Error(
+          `Could not be possible to register expense: ${err.message || err}`
+        );
+      });
+    const expense = result.map(res => {
+      const category = CategoryAdapter.create({
+        name: res.categoria_nome,
+        description: res.categoria_descricao
+      });
+      const paymentType = PaymentTypeAdapter.create({
+        type: res.tipo_pagamento
+      });
+      category.id = res.categoria_id;
+      paymentType.id = res.tipo_pagamento_id;
+
+      const expense = ExpenseAdapter.create({
+        amount: res.valor,
+        description: res.descricao,
+        date: new Date(res.data_compra),
+        category,
+        paymentType
+      });
+      expense.id = res.id;
+
+      return expense;
+    });
+
+    return expense;
   }
 }
