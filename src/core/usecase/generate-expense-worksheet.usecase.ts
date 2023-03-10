@@ -38,12 +38,12 @@ export default class GenerateExpenseWorksheetUseCase {
       'column-5': transformToMoney(expense.amount)
     }));
 
-    const a = await this.worksheetProvider.generate({
+    const file = await this.worksheetProvider.generate({
       path: '/template-extract-household-budget.xlsx',
       data: dataWorksheet,
       fileName: `${randomUUID()}.xlsx`
     });
 
-    return a.toString();
+    return file.toString();
   }
 }
