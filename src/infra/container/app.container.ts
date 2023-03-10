@@ -3,6 +3,7 @@ import { type ICepProvider } from '~/core/providers/cep.provider.interface';
 import { type IPdfProvider } from '~/core/providers/pdf.provider.interface';
 import { type IStorageProvider } from '~/core/providers/storage.provider.interface';
 import { type ITemplateProvider } from '~/core/providers/template.provider.interface';
+import { type IWorksheetProvider } from '~/core/providers/worksheet.provider.interface';
 import { type ICategoryRepository } from '~/core/repository/category.repository.interface';
 import { type IExpenseRepository } from '~/core/repository/expense.repository.interface';
 import { type IPaymentTypeRepository } from '~/core/repository/payment-type.repository.interface';
@@ -15,6 +16,7 @@ import ViaCepProvider from '~/infra/providers/cep/viacep-provider.cep';
 import PuppeteerProviderPdf from '~/infra/providers/pdf/puppeteer.provider.pdf';
 import DiskStorageProvider from '~/infra/providers/storage/disk.storage.provider';
 import HandlebarsTemplateProvider from '~/infra/providers/template/handlebars.template.provider';
+import ExceljsWorksheetProvider from '~/infra/providers/worksheet/exceljs.worksheet.provider';
 
 const ContainerFake = {
   make() {
@@ -51,6 +53,10 @@ const ContainerFake = {
       HandlebarsTemplateProvider
     );
     container.registerSingleton<ICepProvider>('CepProvider', ViaCepProvider);
+    container.registerSingleton<IWorksheetProvider>(
+      'WorksheetProvider',
+      ExceljsWorksheetProvider
+    );
   }
 };
 

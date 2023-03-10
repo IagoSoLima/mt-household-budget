@@ -35,5 +35,12 @@ export const TEMPLATE_FOLDER = path.resolve(
   'template',
   'view'
 );
+export const MODEL_WORKSHEET_FOLDER = path.resolve(
+  __dirname,
+  '..',
+  'providers',
+  'worksheet',
+  'model'
+);
 export const TMP_FOLDER = path.resolve(__dirname, '..', '..', '..', 'tmp');
 export const UPLOADS_FOLDER = path.resolve(TMP_FOLDER, 'uploads');
