@@ -10,6 +10,5 @@ export default function AppContainer() {
     return;
   }
 
-  console.log('AppContainer');
   container.make();
 }

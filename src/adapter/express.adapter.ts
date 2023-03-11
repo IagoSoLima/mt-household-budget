@@ -1,7 +1,7 @@
 import { type RequestHandler } from 'express';
 import { type AbstractFunction } from '~/common/controller/abstract-controller.interface';
 import { ResponseDTO } from '~/common/dto/response.dto';
-import { camelizeKeys, snakeKeys } from '~/common/util';
+import { camelizeKeys } from '~/common/util';
 
 const DEFAULT_VALUE_FN = async () => {
   await Promise.resolve({});
@@ -15,8 +15,7 @@ const ExpressAdapter = {
           const responseDTO = ResponseDTO<T>;
           res.json(responseDTO.factory(response));
         })
-        .catch(err => {
-          console.log(err);
+        .catch(() => {
           const responseDTO = ResponseDTO<T>;
           res.json(responseDTO.factory(null, false));
         });

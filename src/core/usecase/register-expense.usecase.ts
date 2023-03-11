@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import AppLoggerAdapter from '~/adapter/app-logger.adapter';
 import CategoryAdapter from '~/adapter/category.adapter';
 import { removeMask } from '~/common/util';
 import type Category from '~/core/entity/category.entity';
@@ -29,7 +30,9 @@ export class RegisterExpenseUseCase {
     private readonly cepProvider: CepProvider,
 
     @inject('PlaceRepository')
-    private readonly placeRepository: PlaceRepository
+    private readonly placeRepository: PlaceRepository,
+
+    private readonly logger = AppLoggerAdapter.create()
   ) {}
 
   async execute(params: RegisterExpenseParam) {
@@ -53,7 +56,11 @@ export class RegisterExpenseUseCase {
     const foundPaymentType = paymentType !== null;
 
     if (!foundPaymentType) {
-      throw new Error('Payment type not found');
+      this.logger.fail({
+        category: 'REGISTER_EXPENSE_USECASE_ERROR',
+        error: 'Payment type not found'
+      });
+      throw new Error('PAYMENT_TYPE_NOT_FOUND');
     }
 
     let category: Category = CategoryAdapter.create(categoryParam as Category);

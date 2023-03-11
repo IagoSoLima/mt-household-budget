@@ -1,14 +1,14 @@
-import { waitForDebugger } from 'inspector';
 import { inject, injectable } from 'tsyringe';
+import AppLoggerAdapter from '~/adapter/app-logger.adapter';
 import CategoryAdapter from '~/adapter/category.adapter';
 import { removeMask } from '~/common/util';
+import type Category from '~/core/entity/category.entity';
+import type Place from '~/core/entity/place.entity';
+import { ICepProvider as CepProvider } from '~/core/providers/cep.provider.interface';
 import { ICategoryRepository as CategoryRepository } from '~/core/repository/category.repository.interface';
 import { IExpenseRepository as ExpenseRepository } from '~/core/repository/expense.repository.interface';
 import { IPaymentTypeRepository as PaymentTypeRepository } from '~/core/repository/payment-type.repository.interface';
-import type Category from '../entity/category.entity';
-import type Place from '../entity/place.entity';
-import { ICepProvider as CepProvider } from '../providers/cep.provider.interface';
-import { IPlaceRepository as PlaceRepository } from '../repository/place.repository.interface';
+import { IPlaceRepository as PlaceRepository } from '~/core/repository/place.repository.interface';
 import {
   type ChargePaymentType,
   type UpdateExpenseParam
@@ -30,7 +30,9 @@ export class UpdateExpenseUseCase {
     private readonly cepProvider: CepProvider,
 
     @inject('PlaceRepository')
-    private readonly placeRepository: PlaceRepository
+    private readonly placeRepository: PlaceRepository,
+
+    private readonly logger = AppLoggerAdapter.create()
   ) {}
 
   async execute(params: UpdateExpenseParam) {
@@ -47,7 +49,11 @@ export class UpdateExpenseUseCase {
     const foundExpense = expense !== null;
 
     if (!foundExpense) {
-      throw new Error('Expense not found');
+      this.logger.fail({
+        category: 'UPDATE_EXPENSE_USECASE_ERROR',
+        error: 'Expense not found'
+      });
+      throw new Error('EXPENSE_NOT_FOUND');
     }
 
     const chargePaymentType: ChargePaymentType = {
@@ -62,7 +68,11 @@ export class UpdateExpenseUseCase {
     const foundPaymentType = paymentType !== null;
 
     if (!foundPaymentType) {
-      throw new Error('Payment type not found');
+      this.logger.fail({
+        category: 'UPDATE_EXPENSE_USECASE_ERROR',
+        error: 'Payment type not found'
+      });
+      throw new Error('PAYMENT_TYPE_NOT_FOUND');
     }
 
     let category: Category = CategoryAdapter.create(categoryParam as Category);

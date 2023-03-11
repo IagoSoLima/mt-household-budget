@@ -163,6 +163,11 @@ export default class ExpenseRepository implements IExpenseRepository {
           `Could not be possible getting expense: ${err.message || err}`
         );
       });
+
+    if (result === null) {
+      return null;
+    }
+
     const category = CategoryAdapter.create({
       name: result.categoria_nome,
       description: result.categoria_descricao

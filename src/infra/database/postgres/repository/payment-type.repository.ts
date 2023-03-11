@@ -17,6 +17,7 @@ export default class PaymentTypeRepository implements IPaymentTypeRepository {
       'SELECT * FROM tipos_pagamento WHERE tipo = $1',
       [name]
     );
+
     return result;
   }
 }
