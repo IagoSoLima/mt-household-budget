@@ -1,6 +1,7 @@
 node_modules
 dist
 test
+coverage
 package-lock.json
 .docker/pg_data
 .env
